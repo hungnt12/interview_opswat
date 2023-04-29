@@ -1,10 +1,12 @@
 import queryString from "query-string";
 
-const ArticlesRequest = {
+const UsersRequest = {
     exportCreate: (data) => {
         return {
-            title: data?.title || "",
-            body: data?.body || "",
+            email: data?.email || "",
+            username: data?.username || "",
+            fullname: data?.fullname || "",
+            password: data?.password || "",
         }
     },
     exportUpdate: (data) => {
@@ -22,6 +24,7 @@ const ArticlesRequest = {
         }
     },
     filterParams: (url, params) => {
+        console.log(999, params)
         if (((params?.page_index || 0) > 1 || (params?.page_size || 10) > 10)) {
             let query = queryString.stringify({
                 page_index: params?.page_index || 1,
@@ -33,14 +36,17 @@ const ArticlesRequest = {
         }
     }
 }
+
 export const FIELDS_NAME = {
-    title: "title",
-    body: "body"
+    email: "email",
+    username: "username",
+    fullname: "fullname",
+    password: "password",
 }
 
 export const FIELDS_VALIDATION = {
-    title: "Title is required",
-    body: "Body is required"
+    email: "Email is required",
+    password: "Password is required"
 }
 
-export default ArticlesRequest
+export default UsersRequest

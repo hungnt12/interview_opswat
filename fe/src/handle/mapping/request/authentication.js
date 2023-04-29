@@ -4,17 +4,13 @@ const AuthenticationRequest = {
             token: data?.result?.token || "",
             errors: data?.errors || []
         }
+    },
+    requestLogin: (data) => {
+        return {
+            email: data?.email || "",
+            password: data?.password || "",
+        }
     }
-}
-
-export const FIELDS_NAME = {
-    title: "title",
-    body: "body"
-}
-
-export const FIELDS_VALIDATION = {
-    title: "Title is required",
-    body: "Body is required"
 }
 
 export default AuthenticationRequest

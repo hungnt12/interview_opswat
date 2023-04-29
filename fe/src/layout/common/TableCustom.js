@@ -52,7 +52,8 @@ const TableCustom = props => {
                                                         generateAction(column?.optionsContent?.format?.props?.children, row)
                                                     ) : createElement(column?.optionsContent?.format?.type, {
                                                         ...column?.optionsContent?.format?.props,
-                                                        onClick: () => props[`on${capitalizeFirstLetter(column.dataIndex)}`](row)
+                                                        onClick: () => column?.optionsContent?.format?.props?.onAction(row)
+                                                        // onClick: () => props[`on${capitalizeFirstLetter(column.dataIndex)}`](row)
                                                     }) : column?.optionsContent?.format && typeof value === 'number'
                                                         ? column?.optionsContent?.format(value)
                                                         : value}

@@ -8,7 +8,7 @@ export const ActionLogin = async (request, navigate, callback) => {
         let result = AuthenticationRequest.exportLogin(handleError(await axios({
             method: 'post',
             url: URL_API.LOGIN,
-            data: request
+            data: AuthenticationRequest.requestLogin(request)
         })))
         if (result?.token) {
             localStorage.setItem("tk", result?.token)

@@ -33,17 +33,15 @@ const MainRouter = props => {
                     <AuthVerify>
                         <Layouts.Index/>
                     </AuthVerify>}/>
-                <Route path='/articles/list' loader={({ params }) => {
-                    return "articles";
-                }} exact={false} element={
+                <Route path='/articles/list' exact={false} element={
                     <AuthVerify>
                         <Layouts.Article/>
                     </AuthVerify>}/>
-                <Route path='/articles/action'  exact={false} element={
+                <Route path='/articles/action' exact={false} element={
                     <AuthVerify>
                         <Layouts.ArticleAction/>
                     </AuthVerify>}/>
-                <Route path='/articles/action/:id'  exact={false} element={
+                <Route path='/articles/action/:id' exact={false} element={
                     <AuthVerify>
                         <Layouts.ArticleAction/>
                     </AuthVerify>}/>

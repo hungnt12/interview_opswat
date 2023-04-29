@@ -1,5 +1,5 @@
 import {Alert, Box, Button, InputLabel, OutlinedInput, TextField, FormControl} from "@mui/material";
-import {FIELDS_NAME, FIELDS_VALIDATION} from "../../../../handle/mapping/request/authentication";
+import {FIELDS_NAME, FIELDS_VALIDATION} from "../../../../handle/mapping/request/articles";
 import {handleFormError} from "../../../../constant/functions";
 import {useEffect, useState} from "react";
 import {find} from "lodash";

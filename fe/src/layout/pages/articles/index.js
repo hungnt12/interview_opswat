@@ -148,27 +148,6 @@ const Index = props => {
 
     return (
         <>
-            <Dialog
-                open={isRemove}
-                onClose={() => setIsRemove(false)}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">
-                    Notification
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        Are you sure to delete
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={e => setIsRemove(false)}>Cancel</Button>
-                    <Button onClick={e => onRemove()} autoFocus>
-                        Delete
-                    </Button>
-                </DialogActions>
-            </Dialog>
             <div className="container py-4">
                 <div className="row">
                     <div className="col-6">

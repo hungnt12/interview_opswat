@@ -1,14 +1,11 @@
 export const TABLE_MAPPING = {
     USERS: {
-        name: "Name",
-        code: "ISO\u00a0Code",
-        size: "Population",
-        density: "Size\u00a0(km\u00b2)",
-        population: "Population",
-
+        id: "Order",
         email: "Email",
         username: "Username",
         fullname: "Fullname",
+        created_at: "Create Date",
+        updated_at: "Update Date",
         action: "Action"
     },
     ARTICLES: {
@@ -25,6 +22,9 @@ export const TABLE_MAPPING = {
 export const URL_API = {
     LOGIN: "http://localhost:3111/api/login",
     USERS_LIST: "http://localhost:3111/api/users",
+    USERS_DELETE: "http://localhost:3111/api/users",
+    USERS_CREATE: "http://localhost:3111/api/users",
+
     ARTICLES_LIST: "http://localhost:3111/api/articles",
     ARTICLES_CREATE: "http://localhost:3111/api/articles",
     ARTICLES_ITEM: "http://localhost:3111/api/articles",

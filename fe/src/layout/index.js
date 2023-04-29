@@ -1,5 +1,4 @@
-import {Outlet, Link} from "react-router-dom";
-import Header from "./common/Header";
+import {Outlet, Link, useNavigate} from "react-router-dom";
 import {DataGrid} from '@mui/x-data-grid';
 import {
     Button,
@@ -15,69 +14,15 @@ import {
     TableRow
 } from "@mui/material";
 import {useEffect, useState} from "react";
-import UsersResponse, {columns as col, UserResponse} from "../handle/mapping/response/users";
+import {columns as col} from "../handle/mapping/response/users";
 import {columnsTable, getDataSource, getTitleTable} from "../constant/functions";
 import TableCustom from "./common/TableCustom";
-// import {DeleteForeverIcon} from '@mui/icons-material';
-// import {DeleteForeverIcon} from '@mui/icons-material';
 
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import Layout from "./common/Layout";
-import {ActionUsersList} from "../handle/services/users";
+import EditIcon from '@mui/icons-material/Edit';
+import {closeSnackbar, enqueueSnackbar} from "notistack";
+import {ActionUsersList, ActionUsersDelete} from "../handle/services/users";
 
-
-const columns = [
-    {id: 'name', label: 'Name', minWidth: 170},
-    {id: 'code', label: 'ISO\u00a0Code', minWidth: 100},
-    {
-        id: 'population',
-        label: 'Population',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toLocaleString('en-US'),
-    },
-    {
-        id: 'size',
-        label: 'Size\u00a0(km\u00b2)',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toLocaleString('en-US'),
-    },
-    {
-        id: 'density',
-        label: 'Density',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toFixed(2),
-    },
-];
-
-function createData(name, code, population, size) {
-    const density = population / size;
-    return new UsersResponse({name, code, population, size, density}).exportList();
-}
-
-const rows = [
-    createData('India', 'IN', 1324171354, 3287263),
-    createData('China', 'CN', 1403500365, 9596961),
-    createData('Italy', 'IT', 60483973, 301340),
-    createData('United States', 'US', 327167434, 9833520),
-    createData('Canada', 'CA', 37602103, 9984670),
-    createData('Australia', 'AU', 25475400, 7692024),
-    createData('Germany', 'DE', 83019200, 357578),
-    createData('Ireland', 'IE', 4857000, 70273),
-    createData('Mexico', 'MX', 126577691, 1972550),
-    createData('Japan', 'JP', 126317000, 377973),
-    // createData('France', 'FR', 67022000, 640679),
-    // createData('United Kingdom', 'GB', 67545757, 242495),
-    // createData('Russia', 'RU', 146793744, 17098246),
-    // createData('Nigeria', 'NG', 200962417, 923768),
-    // createData('Brazil', 'BR', 210147125, 8515767),
-    // createData('1123123123', 'BR', 210147125, 8515767),
-    // createData('123412341234', 'BR', 210147125, 8515767),
-    // createData('23452352345', 'BR', 210147125, 8515767),
-    // createData('sầ', 'BR', 210147125, 8515767),
-];
 
 const Index = props => {
     const initTables = {
@@ -95,19 +40,25 @@ const Index = props => {
                         },
                         optionsContent: {
                             align: 'center',
-                            format: <DeleteForeverIcon className="cursor--pointer"/>
+                            format: <DeleteForeverIcon className="cursor--pointer" typeAction="delete" onAction={item => {
+                                enqueueSnackbar('Are you sure to delete', {
+                                    action: (e) => action(e, item),
+                                    preventDuplicate: true
+                                })
+                            }}/>
                         }
                     }
                 },
-                tag: "users"
+                tag: "articles"
             })
         },
         [pagination, setPagination] = useState({
-            // total: 0,
+            total: 0,
             // totalPage: 0,
             pageIndex: 0,
             pageSize: 0
         }),
+        navigate = useNavigate(),
         [resultList, setResultList] = useState([]),
         [isRemove, setIsRemove] = useState(false),
         [itemSelect, setItemSelect] = useState({});
@@ -119,20 +70,28 @@ const Index = props => {
         };
     }, []);
 
-    useEffect(() => {
-        async function getList() {
-            let result = await ActionUsersList()
-            setResultList(result?.result)
-            setPagination({
-                pageIndex: result?.page_index,
-                pageSize: result?.page_size
-            })
-        }
+    async function getList(params) {
+        let result = await ActionUsersList(params)
+        setResultList(result?.result)
+        setPagination({
+            pageIndex: result?.page_index,
+            pageSize: result?.page_size,
+            total: result?.total
+        })
+    }
 
+    async function removeItem(e, snackbarId) {
+        let result = await ActionUsersDelete(e, null, () => {
+        }, enqueueSnackbar)
+        getList();
+        closeSnackbar(snackbarId)
+    }
+
+    useEffect(() => {
         getList()
     }, []);
-
     const onChangePage = (event, newPage) => {
+        getList({page_index: newPage + 1})
         setPagination({
             ...pagination,
             pageIndex: newPage
@@ -141,6 +100,7 @@ const Index = props => {
     };
 
     const onChangePageSize = (event) => {
+        getList({page_size: +event.target.value})
         setPagination({
             ...pagination,
             pageSize: +event.target.value,
@@ -150,57 +110,47 @@ const Index = props => {
         // setPage(0);
     };
 
-    const onRemove = (e) => {
-
+    const onRemove = (e, snackbarId) => {
+        removeItem(e, snackbarId)
     }
 
-    const onAction = (type) => {
-        if (type.toLowerCase()) {
-
+    const onCreate = (type, item) => {
+        if (type.toLowerCase() === 'create') {
+            navigate("/users/action")
         } else {
-
+            navigate(`/users/action/${item?.id}`, {state: {id: item?.id}})
         }
     }
 
+    const action = (snackbarId, item) => (
+        <>
+            <button onClick={() => onRemove(item, snackbarId)}>
+                Remove
+            </button>
+            <button onClick={() => {
+                closeSnackbar(snackbarId)
+            }}>
+                Cancel
+            </button>
+        </>
+    );
+
     return (
         <>
-            <Dialog
-                open={isRemove}
-                onClose={() => setIsRemove(false)}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">
-                    Notification
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        Are you sure to delete
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={e => setIsRemove(false)}>Cancel</Button>
-                    <Button onClick={e => onRemove()} autoFocus>
-                        Delete
-                    </Button>
-                </DialogActions>
-            </Dialog>
             <div className="container py-4">
                 <div className="row">
-                    <div className="col-6">
+                    <div className="col-12">
                         <p className="h4 py-3">Users List</p>
                     </div>
-                    <div className="col-6 text-end">
-                        <Button onClick={e => onAction("CREATE")} autoFocus>
-                            Create
-                        </Button>
-                    </div>
                 </div>
+
                 <TableCustom
-                    onAction={e => {
-                        setIsRemove(true)
-                        setItemSelect(e)
-                    }}
+                    // onAction={(item) => {
+                    //     enqueueSnackbar('Are you sure to delete', {
+                    //         action: (e) => action(e, item),
+                    //         preventDuplicate: true
+                    //     })
+                    // }}
                     columns={initTables?.columns}
                     source={getDataSource(resultList || [], initTables.modalSource)}
                     onChangePage={onChangePage}
