@@ -1,0 +1,29 @@
+{
+  "name": "sample_be",
+  "version": "0.0.6",
+  "description": "An example BE app structure.",
+  "main": "app/index.js",
+  "scripts": {
+    "start": "PORT=3111 app/start.js",
+    "test": "",
+    "db:migrate": "npx knex migrate:latest",
+    "db:seed": "npx knex seed:run"
+  },
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=12"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "^0.0.3",
+    "body-parser": "1.19.0",
+    "cors": "^2.8.5",
+    "express": "4.17.1",
+    "express-swagger-generator": "^1.1.17",
+    "jsonwebtoken": "^9.0.0",
+    "knex": "0.20.8",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "pg": "7.18.1"
+  }
+}

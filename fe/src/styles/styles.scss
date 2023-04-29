@@ -1,0 +1,35 @@
+.navbar-light .navbar-nav .active > .nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show > .nav-link {
+    color: black
+}
+
+.cursor {
+    &--pointer {
+        cursor: pointer;
+    }
+}
+
+.hn {
+    &__login {
+        &--wrapper {
+            width: 400px;
+            position: absolute;
+            top: 30%;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+        }
+    }
+
+    &__articles-action {
+        &--wrapper {
+            //width: 600px;
+            //position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+        }
+    }
+}

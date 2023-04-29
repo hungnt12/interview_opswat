@@ -1,0 +1,13 @@
+/node_modules
+/.pnp
+.pnp.js
+/.idea/
+/fe/node_modules
+
+# testing
+/coverage
+
+# production
+/build
+/package-lock.json
+/fe/package-lock.json
