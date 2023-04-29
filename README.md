@@ -4,6 +4,8 @@ The project includes
 - Backend source: Show restful api
 - Frontend source: Show Ui for customer
 
+***Please go to "fe" folder to use FrontEnd***
+
 ## Config database for run
 
 ["./knexfile.js"](""")
